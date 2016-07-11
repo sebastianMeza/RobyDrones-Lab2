@@ -1,0 +1,1120 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <title>Robotica Lab 2</title>
+  <meta name="viewport" content="initial-scale=1.0">
+  <meta charset="utf-8">
+  <style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  #map {
+    height: 80%;
+  }
+  .alertify-notifier .ajs-message.ajs-error{
+    color: #fff;
+    background: rgba(217, 92, 92, 0,95);
+    text-shadow: -1px -1px 0 rgba(0, 0, 0, 0,5);
+  }
+  .alertify-notifier .ajs-message.ajs-success{
+    color: #fff;
+    background: rgba(217, 92, 92, 0,95);
+    text-shadow: -1px -1px 0 rgba(0, 0, 0, 0,5);
+  }
+  </style>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"> 
+  <link rel="stylesheet" href="alertify.min.css">    
+  <!-- Latest compiled and minified JavaScript -->
+  <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  <script   src="alertify.min.js"></script>
+  
+</head>
+<body>
+  <div class="alert alert-success" align ="center"><h5>Laboratorio 2 Robótica - Drones</h5></div>
+  <div id="map" class="container"></div>
+  <div class="container">
+    <div class="col">
+      <div class="row">
+        <!--div class="btn btn-success" onclick="agregarArea();">Indicar Area</div>
+        <div class="btn btn-warning" onclick="agregarPosInicial();">Indicar Posición Inicial</div-->
+          <div class="btn btn-success" data-toggle="modal" data-target="#myModal3">Indicar Área</div>
+          <div class="btn btn-warning" onclick="verificar();" >Posición inicial</div>
+          <div class="btn btn-danger" data-toggle="modal" data-target="#myModal">Ingresar Obstáculo</div>
+          <div class="btn btn-primary pull-right" onclick="generarCamino();">Generar misión</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document" style="width: 85%;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Indicar área</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <div class="row">
+                <div class="col col-md-6">
+
+
+
+             
+             <label for="ptoc">Punto A</label>
+            
+            <div  id="ptod"  class="row">
+             <div class="col col-md-6">
+              <label for=latitud>Latitud</label>
+              <input type="number" name="latitud" id="latitudD" class="form-control"  value="-33.4501078">
+            </div>
+            <div class="col col-md-6">
+             <label for=longitud>Longitud</label>
+             <input type="number" name="longitud" id="longitudD" class="form-control"  value="-70.6912440">
+           </div>
+         </div>
+
+
+            <br>
+            <label for="ptod">Punto B</label>
+
+             <div  id="ptoc"  class="row">
+               <div class="col col-md-6">
+                <label for=latitud>Latitud</label>
+                <input type="number" name="latitud" id="latitudC" class="form-control"  value="-33.4506762">
+              </div>
+              <div class="col col-md-6">
+                <label for=longitud>Longitud</label>
+                <input type="number" name="longitud" id="longitudC" class="form-control"  value="-70.6912440">
+              </div>
+            </div>
+         <br>
+                  <label for="ptoa">Punto C</label>
+                  <div  id="ptoa"  class="row">
+                   <div class="col col-md-6">
+                    <label for=latitud>Latitud</label>
+                    <input type="number" name="latitud" id="latitudA" class="form-control" value="-33.4501078">
+                  </div>
+                  <div class="col col-md-6">
+                   <label for=longitud>Longitud</label>
+                   <input type="number" name="longitud" id="longitudA" class="form-control"  value="-70.6908149">
+                 </div>
+               </div>
+
+               <br>
+               <label for="ptob">Punto D</label>
+               <div  id="ptob"  class="row">
+                 <div class="col col-md-6">
+                  <label for=latitud>Latitud</label>
+                  <input type="number" name="latitud" id="latitudB" class="form-control"  value="-33.4506762">
+                </div>
+                <div class="col col-md-6">
+                 <label for=longitud>Longitud</label>
+                 <input type="number" name="longitud" id="longitudB" class="form-control"  value="-70.6908149">
+               </div>
+             </div>
+
+
+
+
+       </div>
+       <div class="col col-md-6">
+         <img src="formato_de_ingreso.png" alt="">
+       </div>
+     </div>
+
+   </div>
+ </div>
+ <div class="modal-footer">
+  <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+  <button type="button" class="btn btn-primary"  onclick="agregarArea();" >Agregar</button>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Posición inicial</h4>
+      </div>
+      <div class="modal-body">
+      <div class="form-group">
+        <label for="select1">Seleccione el vértice</label>
+        <select class="form-control" id="select1">
+        </select>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary"  onclick="agregarPosInicial();" >Agregar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Nuevo Obstáculo</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="largo">Largo</label>
+          <input type="number" name="largo" id="largo" placeholder="metros" min="1" class="form-control">
+          <label for="ancho">Ancho</label>
+          <input type="number" name="ancho" id="ancho" placeholder="metros" min="1" class="form-control">
+          <label for=latitud>Latitud</label>
+          <input type="number" name="latitud" id="latitud" class="form-control">
+          <label for=longitud>Longitud</label>
+          <input type="number" name="longitud" id="longitud" class="form-control">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary"  onclick="agregarObstaculo();" >Agregar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var map;
+var infoWindow;
+var polygon;
+var area;
+var posInicial;
+var markers=[];
+var poly;
+function initMap() {
+
+  var myLatLng = {lat: -33.5926511, lng: -70.7327125};
+
+  map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 13,
+    center: myLatLng,
+    mapTypeId: google.maps.MapTypeId.SATELLITE
+
+  });
+  getLocation();
+
+  infoWindow = new google.maps.InfoWindow();
+     poly= new google.maps.Polyline({
+      strokeColor: '#FFFF00',
+      strokeOpacity: 1.0,
+      strokeWeight: 3
+      });
+      poly.setMap(map);
+}
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    alert("Geolocation is not supported by this browser.");
+  }
+}
+function showPosition(position) {
+  var lat = position.coords.latitude;
+  var lng = position.coords.longitude;
+  map.setCenter(new google.maps.LatLng(lat, lng));
+}
+function agregarArea(){
+  if(polygon) polygon.setMap(null);
+  var longitudA = $("#longitudA").val();
+  var latitudA = $("#latitudA").val();
+  var longitudB = $("#longitudB").val();
+  var latitudB = $("#latitudB").val();
+  var longitudC = $("#longitudC").val();
+  var latitudC = $("#latitudC").val();
+  var longitudD = $("#longitudD").val();
+  var latitudD = $("#latitudD").val();
+
+  var ptoA = new google.maps.LatLng(latitudA,longitudA);
+  var ptoB =new google.maps.LatLng(latitudB,longitudB);
+  var ptoC =new google.maps.LatLng(latitudC,longitudC);
+  var ptoD =new google.maps.LatLng(latitudD,longitudD);
+
+  var current=[ptoA,ptoB,ptoC,ptoD];
+    //var current = map.getCenter();
+    //current =  [{lat: current.lat(), lng: current.lng()},{lat: current.lat(), lng: current.lng()}];
+    polygon = new google.maps.Polygon({
+      map: map,
+      paths: current,
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpacity: 0.35,
+      //draggable: true,
+      geodesic: true,
+      //editable: true
+    });
+    infoWindow.setContent("Se ha ingresado una nueva area");
+    infoWindow.setPosition(ptoA);
+    map.setCenter(ptoA);
+    infoWindow.open(map);
+
+    setTimeout(function() {
+
+      infoWindow.close(map);
+    }, 1500);
+    google.maps.event.addListener(polygon, "dragend", getPath);
+    google.maps.event.addListener(polygon.getPath(), "insert_at", getPath);
+    google.maps.event.addListener(polygon.getPath(), "remove_at", getPath);
+    google.maps.event.addListener(polygon.getPath(), "set_at", getPath);
+    alertify.success("Se ha ingresado un área");
+    $("#myModal3").modal('toggle');
+  }
+  function getPath(){
+    area= polygon.getPath();
+    infoWindow.setContent("Se ha cambiado el area");
+    infoWindow.setPosition(map.getCenter());
+
+    infoWindow.open(map);
+
+    setTimeout(function() {
+
+      infoWindow.close(map);
+    }, 1500);
+  }
+  var selectedposincial;
+  var vertices;
+  function verificar() {
+    if(polygon ==null && area == null){
+      alertify.error("Debe ingresar un área primero");
+    }else{
+      if(vertices == null){
+        vertices = polygon.getPath().b;
+        selectedposincial = vertices[0];
+        $.each(vertices, function (i, vertice) {
+          $('#select1').append($('<option>', { 
+              value: i,
+              text : vertice.lat()+","+vertice.lng()
+            }));
+        });
+      }
+      $("#myModal2").modal();
+    }
+  }
+  $( "#select1" ).change(function() {
+    var selected = $( "#select1" ).val();
+    selectedposincial = vertices[selected];
+  });
+  function agregarPosInicial(){
+    if(posInicial) posInicial.setMap(null);
+    var longitud = selectedposincial.lng();
+    var latitud = selectedposincial.lat();
+    var posIni=new google.maps.LatLng(latitud,longitud);
+    var iconBase = 'https://maps.google.com/mapfiles/kml/pal2/';
+    posInicial = new google.maps.Marker(
+    {
+      map:map,
+      //draggable:true,
+      animation: google.maps.Animation.DROP,
+      position: posIni,
+      icon: iconBase + 'icon56.png'
+
+    });
+    google.maps.event.addListener(posInicial, 'dragend', function() 
+    {
+      posInicial = posInicial
+          // Quitar comentario para mirar posición
+          //alertify.success(markers[len][2].getPosition().toString());
+
+        });
+    alertify.success("Se ha ingresado posición inicial con éxito");
+    $("#myModal2").modal('toggle');
+  }
+  function agregarObstaculo(){
+    var largo = $("#largo").val();
+    var ancho = $("#ancho").val();
+    var latitud = $("#latitud").val();
+    var longitud = $("#longitud").val();    
+    var marcador=new google.maps.LatLng(latitud,longitud);
+
+    if (ancho < 1 || largo < 1 ){
+      alertify.error('Debe ingresar alto o ancho');
+    }
+    else{
+      var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+      var len = markers.length;
+      var temp = []
+      temp.push(len);
+      temp.push([largo,ancho]);
+      temp.push(new google.maps.Marker(
+      {
+        map:map,
+        //draggable:true,
+        animation: google.maps.Animation.DROP,
+        position: marcador,
+        icon: iconBase + 'schools_maps.png'
+
+      }));
+      markers.push(temp);
+
+      var infowindow = new google.maps.InfoWindow({
+        content: '<p>Obstáculo N°:' + markers[len][0] + ' Largo: ' + markers[len][1][0] +' Ancho: ' +markers[len][1][1]+'<br> Posición: '+ markers[len][2].getPosition() +'</p>'
+      });
+      google.maps.event.addListener(markers[len][2], 'dragend', function(event) 
+      {
+        markers[len][2].setPosition(event.latLng);
+          // Quitar comentario para mirar posición
+          //alertify.success(markers[len][2].getPosition().toString());
+          infowindow = new google.maps.InfoWindow({
+            content: '<p>Obstáculo N°:' + markers[len][0] + ' Largo: ' + markers[len][1][0] +' Ancho: ' +markers[len][1][1]+'<br> Posición: '+ markers[len][2].getPosition() +'</p>'
+          });
+        });
+
+
+      google.maps.event.addListener(markers[len][2], 'click', function() {
+        infowindow.open(map, markers[len][2]);
+        setTimeout(function() {
+
+          infowindow.close(map);
+        }, 1000);
+      });
+      alertify.success("Se ha ingresado Obstáculo con éxito");
+      $("#myModal").modal('toggle');
+    }
+  }
+////////////////////////////////////////////////////
+///////// ALGORITMO QUE CALCULA EL CAMINO //////////
+////////////////////////////////////////////////////
+var poly;
+
+
+function generarCamino() {
+    var arreglo_obstaculos = [];
+    for (var i = 0; i < markers.length; i++) {
+      var temp = [];
+      var area= [markers[i][1][0],markers[i][1][1]];
+      var latlng = [markers[i][2].getPosition().lat(),markers[i][2].getPosition().lng()];
+      temp.push(latlng);
+      temp.push(area);
+      arreglo_obstaculos.push(temp);
+    };
+    
+    if(polygon != null &&  posInicial!= null){
+
+      var areapoly = polygon.getPath().b;
+      var a =  [areapoly[0].lat(),areapoly[0].lng()];
+      var b = [areapoly[1].lat(),areapoly[1].lng()];
+      var c =  [areapoly[2].lat(),areapoly[2].lng()]; 
+      var d = [areapoly[3].lat(),areapoly[3].lng()];
+      var vertices_area = [c,d,b,a];
+      //[LAT,LONG],[LARGO, ANCHO]
+     // var arreglo_obstaculos = [[[-33.5925987,-70.7259668],[10,50]],[[-33.587309, -70.722954],[2,3]]]; //
+
+      //obstaculo 2: -33.588607, -70.726295
+      
+      /*
+      for (var i=0; i<arreglo_obstaculos.length; i++) {
+        console.log("obstaculo "+i+": ["+arreglo_obstaculos[i][0][0]+",\t"+arreglo_obstaculos[i][0][1]+"],\tancho: "+arreglo_obstaculos[i][1][0]+",\tlargo: "+arreglo_obstaculos[i][1][1]);
+      };
+      */
+      var punto_inicial = [posInicial.getPosition().lat(),posInicial.getPosition().lng()];
+      calcularCamino(vertices_area,arreglo_obstaculos,punto_inicial);
+    }
+    else{
+      alertify.error("Debe ingresar una área y una posición inicial");
+    }
+    
+  }
+
+  var un_metro = 0.0000089;
+  var tamano_grilla = 6; //numeros enteros
+  var grilla_global = [];
+  var index_global = 0;
+  var ruta = [];
+
+  function calcularCamino(area, obstaculos, punto_inicial){
+
+    //TERCER NUMERO= 0: desconocido, 1: se debe visitar, 2: ya fue visitado, -1: posee obstaculo
+    var grilla = crearGrilla(area,obstaculos);
+
+    grilla_global
+
+    for(var i=0; i<grilla.length; i++) {
+      grilla_global.push(grilla[i][2]);
+    };
+
+    //var respuesta = revisarGrilla(-33.592599,-70.725967,obstaculos);
+    //console.log("respuesta: "+respuesta);
+
+    //BORRAR DESPUES DE TESTEAR
+    var cantidad_lat = calcularCantidadGrillas(area[0][0],area[1][0]);
+    var cantidad_lon = calcularCantidadGrillas(area[0][1],area[2][1]);
+
+
+
+/*
+    //IMPRIMIR MAPEO
+    for (var i=0; i<cantidad_lon;i++){
+      var palabra = "";
+      for (var j=0; j<cantidad_lat;j++){
+        palabra = palabra+grilla[i*cantidad_lat+j][2];
+      }
+      if(i % 2 == 0)
+        console.log(palabra+";");
+      else
+        console.log(palabra+":");
+    }
+*/
+    
+    //console.log("punto          [-33.5840987,-70.7207668]");
+    //console.log("punto cercano: ["+grilla[index_cercano[0]][0]+","+grilla[index_cercano[0]][1]+"] , diferencia: ["+index_cercano[1]+", "+index_cercano[2]+"]");
+
+    //var izq = derecha(grilla,185,cantidad_lat,cantidad_lon);
+    //console.log("Celdas lon: "+cantidad_lon+", celdas lat: "+cantidad_lat+", tamaño grilla (mts): "+tamano_grilla);
+    //console.log("Resultado izquierda: "+izq);
+
+    var index_inicial = buscarPuntoMasCercano(punto_inicial[0],punto_inicial[1],grilla);
+    var direccionLon = buscarDireccionLon(index_inicial,grilla,area);
+    var direccionLat = buscarDireccionLat(index_inicial,grilla,area);
+    //console.log("se encuentra: "+direccionLon+", "+direccionLat);
+/*
+    for (var i=0; i<grilla.length; i++) {
+      
+      grilla[i]
+    };
+*/
+
+    var direccionLon_temp = direccionLon;
+    var direccionLat_temp = direccionLat;
+    var index_temp;
+    index_global = index_inicial;
+
+
+    //bajarEnGrilla(8557,grilla,area,cantidad_lat,cantidad_lon);
+
+
+
+
+
+    for(var i=0;i<cantidad_lon;i++) {
+      if(direccionLat_temp=="abajo"){
+        //console.log("global abajo->arriba: "+index_global);
+        subirEnGrilla(index_global,grilla,area,cantidad_lat,cantidad_lon);
+        direccionLat_temp = "arriba";
+
+      }
+      else if(direccionLat_temp=="arriba"){
+        //console.log("global \t\tarriba->abajo: "+index_global);
+        bajarEnGrilla(index_global,grilla,area,cantidad_lat,cantidad_lon);
+        direccionLat_temp = "abajo";
+      }
+      
+      if(direccionLon_temp=="izquierda"){
+        //console.log("se mueve a la derecha");
+        index_temp = derecha(grilla,index_global,cantidad_lat,cantidad_lon);
+      }
+      else if(direccionLon_temp=="derecha"){
+        //console.log("se mueve a la izquierda");
+        index_temp = izquierda(grilla,index_global,cantidad_lat,cantidad_lon);
+      }
+      
+      
+      if(index_temp!=-1 && index_temp!=-2){
+        //console.log("index_temp: "+index_temp);
+        index_global = index_temp;
+      }
+      else if (index_temp==-1){
+
+      }
+      else if (index_temp==-2){
+        //console.log("-2 girando");
+      }
+      
+    }
+
+/*
+    //IMPRIMIR MAPEO
+    for (var i=0; i<cantidad_lon;i++){
+      var palabra = "";
+      for (var j=0; j<cantidad_lat;j++){
+        palabra = palabra+grilla_global[i*cantidad_lat+j];
+      }
+      if(i % 2 == 0)
+        console.log(palabra+";");
+      else
+        console.log(palabra+":");
+    }
+*/
+
+    //var valor = comprobarDiagonalSubir(grilla,1162,cantidad_lat,cantidad_lon);
+    //console.log("valor: "+valor);
+    imprimirResultado(punto_inicial,grilla);
+
+    
+  }
+
+
+  function imprimirResultado(punto_inicial,grilla){
+    var txt = [];
+    var linea_temp = "QGC WPL 110";
+    txt.push(linea_temp);
+    linea_temp = "0 1 0 16  0 0 0 0 "+punto_inicial[0]+"  "+punto_inicial[1]+"  100.000000  1";
+    txt.push(linea_temp);
+    linea_temp = "1 0 0 22  20.000000 0.000000  0.000000  0.000000  0.000000  0.000000  24.000000 1";
+    txt.push(linea_temp);
+    linea_temp = "2 0 0 178 0.000000  3.000000  0.000000  0.000000  0.000000  0.000000  0.000000  1";
+    txt.push(linea_temp);
+    var numero_actual = 3;
+    var arreglo_ruta = [];
+    var ruta_temp;
+    //console.log("Ruta lenght: "+ruta.length);
+    for (var i=0;i<ruta.length; i++) {
+      //console.log("["+grilla[ruta[i]][0]+", "+grilla[ruta[i]][1]+"]");
+      linea_temp = numero_actual+"  0 0 16  0.000000  0.000000  0.000000  0.000000  "+grilla[ruta[i]][0]+"  "+grilla[ruta[i]][1]+"  10.000000 1";
+      txt.push(linea_temp);
+      ruta_temp = [grilla[ruta[i]][0],grilla[ruta[i]][1]];
+      arreglo_ruta.push(ruta_temp);
+      numero_actual++;
+    };
+    linea_temp = numero_actual+"  0 0 20  0.000000  0.000000  0.000000  0.000000  0.000000  0.000000  0.000000  1";
+    txt.push(linea_temp);
+    console.log("largo txt: "+txt.length);
+
+    var salida_waypoints = ""
+    for (var i=0;i<txt.length; i++) {
+      console.log(txt[i]);
+      salida_waypoints = salida_waypoints + txt[i] + '\n';
+    };
+    moverdrone(arreglo_ruta);
+    download( 'archivo.waypoints', salida_waypoints);
+  }
+
+
+  function subirEnGrilla(index_actual,grilla,area,cantidad_lat,cantidad_lon){
+    grilla_global[index_actual] = "^";
+
+    //ruta.push([grilla[index_actual][0],grilla[index_actual][1]]);
+    //console.log("1index_actual: "+index_actual+", index_global: "+index_global);
+    //console.log("2index_actual: "+index_actual+", index_global: "+index_global);
+
+    var index_nuevo = subir(grilla,index_actual,cantidad_lat,cantidad_lon)
+    index_global = index_actual;
+    ruta.push(index_actual);
+    if(index_nuevo==-2){
+      var nuevo_valor = evadirObstaculo(index_actual,grilla,area,cantidad_lat,cantidad_lon,"subir");
+      if(nuevo_valor>=0){
+        index_nuevo = nuevo_valor;
+      }
+    }
+    if(index_nuevo!=-1 && index_nuevo!=-2){
+      //console.log("index: "+index_nuevo),
+      subirEnGrilla(index_nuevo,grilla,area,cantidad_lat,cantidad_lon)
+    }
+    else if(index_nuevo==-1){
+
+    }
+    else{
+      console.log("Error 1: Ocurrio algo inesperado.");
+    }
+  }
+  function bajarEnGrilla(index_actual,grilla,area,cantidad_lat,cantidad_lon){
+    grilla_global[index_actual] = "¨";
+    //console.log("index actual: "+index_actual);
+    var index_nuevo = bajar(grilla,index_actual,cantidad_lat,cantidad_lon);
+    //console.log("bajarEnGrilla index: "+index_nuevo);
+    index_global = index_actual;
+    ruta.push(index_actual);
+    if(index_nuevo==-2){
+      //console.log("-2 obstaculo.bajando");
+      var nuevo_valor = evadirObstaculo(index_actual,grilla,area,cantidad_lat,cantidad_lon,"bajar");
+      if(nuevo_valor>=0){
+        index_nuevo = nuevo_valor;
+      }
+    }
+    if(index_nuevo!=-1 && index_nuevo!=-2){
+      bajarEnGrilla(index_nuevo,grilla,area,cantidad_lat,cantidad_lon)
+    }
+    else if(index_nuevo==-1){
+
+    }
+    else{
+      console.log("Error 2: Ocurrio algo inesperado.");
+    }
+  }
+
+
+  function evadirObstaculo(index_actual,grilla,area,cantidad_lat,cantidad_lon,sentido){
+    //sentido: ""bajar", "subir"
+    var asegurar = asegurarEvasion(sentido,grilla,index_actual,cantidad_lat,cantidad_lon);
+    var movimientos = calcularEvasion(sentido,grilla,index_actual,cantidad_lat,cantidad_lon);
+    //console.log("index_actual: "+index_actual+", \tasegurado: "+asegurar+", mov izquierda: "+movimientos[1]+", mov vertical: "+movimientos[0]);
+    return ejecutarEvasion(sentido,grilla,index_actual,cantidad_lat,cantidad_lon);
+
+  }
+
+
+  function ejecutarEvasion(sentido,grilla,index_actual,cantidad_lat,cantidad_lon){
+    var index_nuevo;
+    var movimientos = calcularEvasion(sentido,grilla,index_actual,cantidad_lat,cantidad_lon);
+    var mov_temp_0 = movimientos[0];
+    var mov_temp_1 = movimientos[1];
+
+    if(mov_temp_0>0 && mov_temp_1>0){
+      while(mov_temp_1>0){
+        index_nuevo = izquierda(grilla,index_actual,cantidad_lat,cantidad_lon);
+        index_actual=index_nuevo;
+        ruta.push(index_actual);
+        mov_temp_1--;
+      }
+      if (sentido=="subir"){
+        while(mov_temp_0>0){
+          index_nuevo = subir(grilla,index_actual,cantidad_lat,cantidad_lon);
+          index_actual=index_nuevo;
+          ruta.push(index_actual);
+          mov_temp_0--;
+        }   
+      }
+      else if (sentido=="bajar"){
+        while(mov_temp_0>0){
+          index_nuevo = bajar(grilla,index_actual,cantidad_lat,cantidad_lon);
+          index_actual=index_nuevo;
+          ruta.push(index_actual);
+          mov_temp_0--;
+        }        
+      }
+      mov_temp_1 = movimientos[1];
+      while(mov_temp_1>0){
+        index_nuevo = derecha(grilla,index_actual,cantidad_lat,cantidad_lon);
+        index_actual=index_nuevo;
+        ruta.push(index_actual);
+        mov_temp_1--;
+      }
+      return index_actual;
+
+    }
+    else{
+      return -2;
+    }
+  }
+
+
+
+
+
+
+  function asegurarEvasion(sentido,grilla,index_actual,cantidad_lat,cantidad_lon){
+    var index_nuevo;
+    var movimientos = calcularEvasion(sentido,grilla,index_actual,cantidad_lat,cantidad_lon);
+    var mov_temp_0 = movimientos[0];
+    var mov_temp_1 = movimientos[1];
+
+    if(mov_temp_0>0 && mov_temp_1>0){
+      while(mov_temp_1>0){
+        index_nuevo = izquierda(grilla,index_actual,cantidad_lat,cantidad_lon);
+        if(index_nuevo==-1 || index_nuevo==-2){
+          return -1;
+        }
+        index_actual=index_nuevo;
+        mov_temp_1--;
+      }
+      if (sentido=="subir"){
+        while(mov_temp_0>0){
+          index_nuevo = subir(grilla,index_actual,cantidad_lat,cantidad_lon);
+          if(index_nuevo==-1 || index_nuevo==-2){
+            return -1;
+          }
+          index_actual=index_nuevo;
+          mov_temp_0--;
+        }   
+      }
+      else if (sentido=="bajar"){
+        while(mov_temp_0>0){
+          index_nuevo = bajar(grilla,index_actual,cantidad_lat,cantidad_lon);
+          if(index_nuevo==-1 || index_nuevo==-2){
+            return -1;
+          }
+          index_actual=index_nuevo;
+          mov_temp_0--;
+        }        
+      }
+      mov_temp_1 = movimientos[1];
+      while(mov_temp_1>0){
+        index_nuevo = derecha(grilla,index_actual,cantidad_lat,cantidad_lon);
+        if(index_nuevo==-1 || index_nuevo==-2){
+          return -1;
+        }
+        index_actual=index_nuevo;
+        mov_temp_1--;
+      }
+      return 1;
+
+    }
+    else{
+      return -2;
+    }
+  }
+
+
+
+
+
+
+
+
+  function calcularEvasion(sentido,grilla,index_actual,cantidad_lat,cantidad_lon){
+    //sentido: "subir", "bajar"
+    var movimientos = [-1,-1];
+    if(sentido=="subir"){
+      movimientos[0] = comprobarSubir(grilla,index_actual,cantidad_lat,cantidad_lon);
+      movimientos[1] = comprobarDiagonalSubir(grilla,index_actual,cantidad_lat,cantidad_lon);
+    }
+    else if(sentido=="bajar"){
+      movimientos[0] = comprobarBajar(grilla,index_actual,cantidad_lat,cantidad_lon);
+      movimientos[1] = comprobarDiagonalBajar(grilla,index_actual,cantidad_lat,cantidad_lon);      
+    }
+    return movimientos;
+  }
+
+
+  function comprobarDiagonalSubir(grilla,index_actual,cantidad_lat,cantidad_lon){
+    if((index_actual+cantidad_lon)>=grilla.length){
+      return -1;
+    }
+    else{
+      var index = 1;
+      while((index_actual+cantidad_lon-index)%cantidad_lon!=(cantidad_lon-1)){
+        if (grilla[index_actual+cantidad_lon-index][2]!="@"){
+          return index;
+        }
+        index++;
+      }
+      return -2;
+    }
+  }
+
+  function comprobarDiagonalBajar(grilla,index_actual,cantidad_lat,cantidad_lon){
+  if((index_actual-cantidad_lon)<0){
+      return -1;
+    }
+    else{
+      var index = 1;
+      while((index_actual-cantidad_lon-index)%cantidad_lon!=(cantidad_lon-1)){
+        if (grilla[index_actual-cantidad_lon-index][2]!="@"){
+          return index;
+        }
+        index++;
+      }
+      return -2;
+    }
+  }
+
+  function comprobarSubir(grilla,index_actual,cantidad_lat,cantidad_lon){
+    if((index_actual+cantidad_lon)>=grilla.length){
+      return -1;
+    }
+    else{
+      var index = 1;
+      while((index_actual+cantidad_lon*index)<grilla.length){
+        if (grilla[index_actual+cantidad_lon*index][2]!="@"){
+          return index;
+        }        
+        index++;
+      }
+      return -2;
+    }
+  }
+
+  function comprobarBajar(grilla,index_actual,cantidad_lat,cantidad_lon){
+    if((index_actual-cantidad_lon)<0){
+      return -1;
+    }
+    else{
+      var index = 1;
+      while((index_actual-cantidad_lon*index)>=0){
+        if (grilla[index_actual-cantidad_lon*index][2]!="@"){
+          return index;
+        }        
+        index++;
+      }
+      return -2;
+    }
+  }
+
+  function buscarDireccionLat(index_inicial,grilla,area){    
+    var diferencia_abajo = Math.abs(area[0][0]-grilla[index_inicial][0]);
+    var diferencia_arriba = Math.abs(area[1][0]-grilla[index_inicial][0]);
+    //console.log("diferencia-izquierda: "+diferencia_izquierda+", diferencia-derecha: "+diferencia_derecha);
+    //console.log("punto inicial ["+grilla[index_inicial][0]+", "+grilla[index_inicial][1]+"]");
+    if(diferencia_abajo<diferencia_arriba){
+      return "abajo";
+    }
+    else
+      return "arriba";
+  }
+
+  function buscarDireccionLon(index_inicial,grilla,area){    
+    var diferencia_izquierda = Math.abs(area[0][1]-grilla[index_inicial][1]);
+    var diferencia_derecha = Math.abs(area[2][1]-grilla[index_inicial][1]);
+    //console.log("diferencia-izquierda: "+diferencia_izquierda+", diferencia-derecha: "+diferencia_derecha);
+    //console.log("punto inicial ["+grilla[index_inicial][0]+", "+grilla[index_inicial][1]+"]");
+    if(diferencia_izquierda<diferencia_derecha){
+      return "izquierda";
+    }
+    else
+      return "derecha";
+  }
+
+
+  function subir(grilla,index_actual,cantidad_lat,cantidad_lon){
+    if((index_actual+cantidad_lon)>=grilla.length){
+      return -1;
+    }
+    else if(grilla[index_actual+cantidad_lon][2]=="@"){
+      //console.log("## obstaculo.subiendo: "+index_actual);
+      return -2;
+    }
+    else{
+      return (index_actual+cantidad_lon);
+    }
+  }
+
+  function bajar(grilla,index_actual,cantidad_lat,cantidad_lon){
+    if((index_actual-cantidad_lon)<0){
+      return -1;
+    }
+    else if(grilla[index_actual-cantidad_lon][2]=="@"){
+      //console.log("## obstaculo.bajando: "+index_actual);
+      return -2;
+    }
+    else{
+      return (index_actual-cantidad_lon);
+    }
+  }
+
+  function izquierda(grilla,index_actual,cantidad_lat,cantidad_lon){
+    if((index_actual-1)<0){
+      return -1;
+    }
+    else if((index_actual%cantidad_lon)==0){
+      return -1;
+    }
+    else if(grilla[index_actual-1][2]=="@"){
+      return -2;
+    }
+    else{
+      return (index_actual-1);
+    }
+  }
+
+  function derecha(grilla,index_actual,cantidad_lat,cantidad_lon){
+    if((index_actual+1)>=grilla.length){
+      return -1;
+    }
+    else if(((index_actual)%(cantidad_lon))==(cantidad_lon-1)){
+      return -1;
+    }
+    else if(grilla[index_actual+1][2]=="@"){
+      return -2;
+    }
+    else{
+      return (index_actual+1);
+    }
+  }
+
+  function buscarPuntoMasCercano(punto_lat,punto_lon,grilla){
+    var index_cercano = [0,100,100]; //[index, diferencia_lat,diferencia_lon]
+    for (var i=0; i<grilla.length;i++){
+      var diferencia_lat = Math.abs(punto_lat-grilla[i][0]);
+      var diferencia_lon = Math.abs(punto_lon-grilla[i][1]);
+      if(diferencia_lat<=index_cercano[1] && diferencia_lon<=index_cercano[2]){
+        index_cercano = [i,diferencia_lat,diferencia_lon];
+      }
+    }
+    var index = index_cercano[0];
+    //console.log("index: "+index_cercano[0]+", diferencia ["+index_cercano[1]+", "+index_cercano[2]);
+    return index;
+  }
+
+  function crearGrilla(area,obstaculos){
+    var puntos_grilla = [];
+
+    var cantidad_lat = calcularCantidadGrillas(area[0][0],area[1][0]);
+    var cantidad_lon = calcularCantidadGrillas(area[0][1],area[2][1]);
+
+    var punto_inicial = [area[0][0]+un_metro*tamano_grilla/2, area[0][1]+un_metro*tamano_grilla/2];
+
+    for(var i=0;i<cantidad_lat; i++){
+      for(var j=0;j<cantidad_lon;j++){
+        var latitud_actual = (punto_inicial[0]+i*un_metro*tamano_grilla).toFixed(7);
+        var longitud_actual = (punto_inicial[1]+j*un_metro*tamano_grilla).toFixed(7);
+        var punto = []; //0: desconocido, 1: se debe visitar, 2: ya fue visitado, -1: posee obstaculo
+        punto.push(latitud_actual);
+        punto.push(longitud_actual);
+        punto.push("0");
+        //console.log("["+punto[0]+","+punto[1]+"], ");
+        puntos_grilla.push(punto);
+      }
+    }
+
+    for (var i=0; i<cantidad_lon;i++){
+      for (var j=0; j<cantidad_lat;j++){
+        if(revisarGrilla(puntos_grilla[i*cantidad_lat+j][0],puntos_grilla[i*cantidad_lat+j][1],obstaculos)){
+          puntos_grilla[i*cantidad_lat+j][2]="@";
+        }
+        else{
+          puntos_grilla[i*cantidad_lat+j][2]="-";          
+        }
+      }
+    }
+    /*
+    console.log("puntos");
+    for (var i=0; i<cantidad_lat*cantidad_lon;i++){
+      var palabra="["+puntos_grilla[i][0]+","+puntos_grilla[i][1]+"], ";
+      console.log(palabra);
+    };
+    */
+    return puntos_grilla;
+  }
+
+  function calcularCantidadGrillas(inicio, fin){
+    var cantidad;
+    cantidad = Math.floor((fin-inicio)/(un_metro*tamano_grilla));
+    //console.log("cantidad de grillas: "+cantidad);
+    return cantidad;
+  }
+
+  function revisarGrilla(centro_area_lat,centro_area_lon,obstaculos){
+    var respuesta = false;
+    var inicio_area_lat = centro_area_lat-tamano_grilla/2*un_metro;
+    var inicio_area_lon = centro_area_lon-tamano_grilla/2*un_metro;
+
+    for(var i=0;i<=tamano_grilla;i++){
+      for(var j=0;j<=tamano_grilla;j++){
+        respuesta = revisarPunto(inicio_area_lat+i*un_metro,inicio_area_lon+j*un_metro, obstaculos);
+        if(respuesta){
+          //console.log("pase por aqui");
+          return respuesta;
+        }
+      }
+    }
+    return respuesta;
+  }
+
+  function revisarPunto(centro_lat_punto,centro_lon_punto, obstaculos){
+    var temp_centro_lat;
+    var temp_centro_lon;
+    var temp_mitad_largo;
+    var temp_mitad_ancho;
+
+    var abajo;
+    var arriba;
+    var izquierda;
+    var derecha;
+
+    for (var i=0; i<obstaculos.length; i++) {
+      temp_centro_lat = obstaculos[i][0][0];
+      temp_centro_lon = obstaculos[i][0][1];
+      temp_mitad_largo = obstaculos[i][1][0]*un_metro/2;
+      temp_mitad_ancho = obstaculos[i][1][1]*un_metro/2;
+
+      abajo = temp_centro_lat-temp_mitad_largo;
+      arriba = temp_centro_lat+temp_mitad_largo;
+      izquierda = temp_centro_lon-temp_mitad_ancho;
+      derecha = temp_centro_lon+temp_mitad_ancho;
+
+      if(centro_lat_punto >= abajo){
+        if(centro_lat_punto <= arriba){
+          if(centro_lon_punto >= izquierda){
+            if(centro_lon_punto <= derecha){
+              return true;
+            }
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+
+ function moverdrone (camino) {
+    poly.setPath(new Array());
+    var path = poly.getPath();
+
+    timeout([0, camino.length-1], 1, function(i){
+          var locat = new google.maps.LatLng(camino[i][0],camino[i][1]);
+          posInicial.setPosition(locat); // Do something after the sleep!
+          path.push(locat);
+    });
+
+
+
+ }
+
+function timeout(range, time, callback){
+  var i = range[0];                
+  callback(i);
+  Loop();
+  function Loop(){
+    setTimeout(function(){
+      i= i + 1;
+      if (i<=range[1]){
+        callback(i);
+        Loop();
+      }
+    }, time*0.0000000001)
+  } 
+}
+function descargarArchivo(contenidoEnBlob, nombreArchivo) {
+    var reader = new FileReader();
+    reader.onload = function (event) {
+        var save = document.createElement('a');
+        save.href = event.target.result;
+        save.target = '_blank';
+        save.download = nombreArchivo || 'archivo.dat';
+        var clicEvent = new MouseEvent('click', {
+            'view': window,
+                'bubbles': true,
+                'cancelable': true
+        });
+        save.dispatchEvent(clicEvent);
+        (window.URL || window.webkitURL).revokeObjectURL(save.href);
+    };
+    reader.readAsDataURL(contenidoEnBlob);
+};
+$( "#boton-txt" ).click(function() {
+  var datos = "Hola"
+    descargarArchivo(generarTexto(datos), 'archivo.waypoints');
+});
+//Genera un objeto Blob con los datos en un archivo TXT
+function generarTexto(datos) {
+    //El contructor de Blob requiere un Array en el primer parámetro
+    //así que no es necesario usar toString. el segundo parámetro
+    //es el tipo MIME del archivo
+    return new Blob(datos, {
+        type: 'text/plain'
+    });
+};
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDNU3lXIG8aBek6Zf67cufU8IjM8OlvlcQ&callback=initMap"
+  async defer></script>
+</body>
+</html>
